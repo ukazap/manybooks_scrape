@@ -8,11 +8,6 @@ require './extract-manybooks'
 $LOG = Logger.new("scraping.log", "monthly")
 grup = %w[1 a b c d e f g h i j k l m n o p q r s t u v w x y z]
 
-def puts_and_log(message)
-  puts message
-  $LOG.debug(message)
-end
-
 grup.each do |g|
   # mulai dari sini:
   s = 1
