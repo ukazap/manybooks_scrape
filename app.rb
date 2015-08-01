@@ -5,7 +5,13 @@ require './schema'
 require './helpers'
 require './extract-manybooks'
 
+$LOG = Logger.new("scraping.log", "monthly")
 grup = %w[1 a b c d e f g h i j k l m n o p q r s t u v w x y z]
+
+def puts_and_log(message)
+  puts message
+  $LOG.debug(message)
+end
 
 grup.each do |g|
   # mulai dari sini:
@@ -16,6 +22,7 @@ grup.each do |g|
   # loop:
   until sudah_buntu(doc)
     doc.css('.smallBookTitle').each do |link|
+      puts_and_log("Begin ABJAD #{g} HALAMAN #{s}")
       source_url = "http://manybooks.net#{link[:href]}"
       extract_manybooks(source_url)
     end
