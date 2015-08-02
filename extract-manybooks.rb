@@ -2,6 +2,11 @@ def extract_manybooks(source_url)
   tid = source_url.split("/").last.gsub(".html", "")
   buku = Nokogiri::HTML(open(source_url, "User-Agent" => $BROWSER))
 
+  if buku.at_css("body").content == "ERROR : PCLZIP_ERR_BAD_FORMAT (-10) : Unable to find End of Central Dir Record signature"
+    puts_and_log("PCLZIP_ERR_BAD_FORMAT (-10) : Unable to find End of Central Dir Record signature: #{tid}", "ERROR")
+    return false
+  end
+
   title = buku.at_css('.booktitle').content
   subtitle = (buku.at_css('.booksubtitle'))? buku.at_css('.booksubtitle').content : nil
   description = (buku.at_css('.notes'))? buku.at_css('.notes').content : nil
