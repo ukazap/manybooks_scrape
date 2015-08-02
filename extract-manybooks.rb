@@ -34,8 +34,10 @@ def extract_manybooks(source_url)
     )
   
   if b.save
-    puts_and_log("Berhasil mengekstrak: #{tid}")
+    puts_and_log("Sukses: #{tid}")
   else
-    puts_and_log("Gagal mengekstrak: #{tid}")
+    error = ""
+    b.errors.each {|e| error << e.last.to_s}
+    puts_and_log("#{error}: #{tid}", "ERROR")
   end
 end

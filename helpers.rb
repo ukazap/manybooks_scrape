@@ -6,7 +6,12 @@ def integerize(some_string)
   some_string.gsub(/[^0-9a-z\\s]/i, '')
 end
 
-def puts_and_log(message)
+def puts_and_log(message, type='INFO')
   puts message
-  $LOG.debug(message)
+  case type
+  when "ERROR"
+    $LOG.error(message)
+  else
+    $LOG.info(message)
+  end
 end
