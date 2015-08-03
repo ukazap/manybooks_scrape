@@ -20,6 +20,7 @@ def extract_book(source_url)
 
     key = (key == "published")? "published_in" : key
     key = (key == "genre")? "genres" : key
+    key = (key == "wordcount")? "word_count" : key
 
     data[key.to_sym] = val
   end
