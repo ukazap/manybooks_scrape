@@ -1,3 +1,5 @@
+require 'active_support/core_ext/hash'
+
 def extract_book(source_url)
   source_url.gsub!(" ", "%20") # on url, replace space char. with %20
   tid = source_url.split("/").last.gsub(".html", "") # get tid from url
@@ -9,6 +11,9 @@ def extract_book(source_url)
   end
 
   data = Hash.new
+  valid_fields = Array.new
+  Book.properties.each {|field| valid_fields << field.name.to_sym }
+
   data[:title] = page.at_css('.booktitle').content
   data[:subtitle] = (page.at_css('.booksubtitle'))? page.at_css('.booksubtitle').content : nil
   data[:description] = (page.at_css('.notes'))? page.at_css('.notes').content : nil
@@ -30,7 +35,8 @@ def extract_book(source_url)
   data[:dl_url] = "http://manybooks.net/_scripts/send.php?tid=#{tid}&book=1:epub:.epub:epub"
   data[:cover_url] = "http://manybooks.net"+page.at_css('img[alt="Cover image for "]')[:src].gsub("-thumb", "")
 
-  book = Book.new(data)
+
+  book = Book.new(data.slice(*valid_fields))
   
   if book.save
     puts_and_log("Saved: #{tid}")
