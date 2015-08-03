@@ -10,19 +10,19 @@ Ruby script for scraping books from manybooks.net
 - Open your terminal
 - Clone this repo:
 ```sh
-git clone https://github.com/ukazap/manybooks_scrape.git
+$ git clone https://github.com/ukazap/manybooks_scrape.git
 ```
 - cd to the new directory:
 ```sh
-cd manybooks_scrape
+$ cd manybooks_scrape
 ```
 - Install dependencies:
 ```sh
-bundle install
+$ bundle install
 ```
 - Run the script: 
 ```sh
-ruby app.rb
+$ ruby app.rb
 ```
 - Sweet! new database file (db.sqlite3) is generated and get populated :smiley:
 :clap::clap::clap::clap::clap::clap::clap::clap::clap::clap::clap::clap::clap:
