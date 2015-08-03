@@ -8,35 +8,25 @@ def extract_manybooks(source_url)
     return false
   end
 
-  title = page.at_css('.booktitle').content
-  subtitle = (page.at_css('.booksubtitle'))? page.at_css('.booksubtitle').content : nil
-  description = (page.at_css('.notes'))? page.at_css('.notes').content : nil
-  excerpt = (page.at_css('.excerpt'))? page.at_css('.excerpt').content : nil
+  data = Hash.new
+  data[:title] = page.at_css('.booktitle').content
+  data[:subtitle] = (page.at_css('.booksubtitle'))? page.at_css('.booksubtitle').content : nil
+  data[:description] = (page.at_css('.notes'))? page.at_css('.notes').content : nil
+  data[:excerpt] = (page.at_css('.excerpt'))? page.at_css('.excerpt').content : nil
 
-  title_info = {}
   page.css('.title-info').each do |info|
-    key = info.content.split(':')[0].strip.gsub(" ", "_").downcase.to_sym
+    key = info.content.split(':')[0].strip.gsub(" ", "_").downcase
+    key = (key == "published")? "published_in" : key
+    key = (key == "genre")? "genres" : key
     val = info.content.split(':')[1].strip
-    title_info[key] = val
+    data[key.to_sym] = val
   end
 
-  dl_url = "http://manybooks.net/_scripts/send.php?tid=#{tid}&book=1:epub:.epub:epub"
-  cover_url = "http://manybooks.net"+page.at_css('img[alt="Cover image for "]')[:src].gsub("-thumb", "")
+  data[:source_url] = source_url
+  data[:dl_url] = "http://manybooks.net/_scripts/send.php?tid=#{tid}&book=1:epub:.epub:epub"
+  data[:cover_url] = "http://manybooks.net"+page.at_css('img[alt="Cover image for "]')[:src].gsub("-thumb", "")
 
-  book = Book.new(
-      :title => title,
-      :subtitle => subtitle,
-      :author => title_info[:author],
-      :published_in => title_info[:published],
-      :description => description,
-      :excerpt => excerpt,
-      :language => title_info[:language],
-      :word_count => title_info[:wordcount],
-      :genres => (title_info[:genres])? title_info[:genres] : title_info[:genre],
-      :source_url => source_url,
-      :dl_url => dl_url,
-      :cover_url => cover_url
-    )
+  book = Book.new(data)
   
   if book.save
     puts_and_log("Saved: #{tid}")
