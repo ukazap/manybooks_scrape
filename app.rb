@@ -18,7 +18,7 @@ group.each do |g|
 
   # loop:
   until doc.css('a[title="next"]').count == 0 # move to next group if there's no page left
-    puts_and_log("BEGIN GROUP #{g.upcase} PAGE #{s}")
+    puts_and_log("BEGIN GROUP #{g.to_s.upcase} PAGE #{s}")
 
     # extract book:
     doc.css('.smallBookTitle').each do |link|
