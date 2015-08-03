@@ -3,7 +3,7 @@ require 'open-uri'
 require 'logger'
 require './schema'
 require './helpers'
-require './extract-manybooks'
+require './extract-book'
 
 $LOG = Logger.new("scraping.log", "monthly")
 $BROWSER = "Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:39.0) Gecko/20100101 Firefox/39.0 Waterfox/39.0"
