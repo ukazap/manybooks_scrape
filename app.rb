@@ -9,27 +9,26 @@ $LOG = Logger.new("scraping.log", "monthly")
 $BROWSER = "Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:39.0) Gecko/20100101 Firefox/39.0 Waterfox/39.0"
 
 puts_and_log("BEGIN SCRAPING")
-grup = %w[1 a b c d e f g h i j k l m n o p q r s t u v w x y z]
+group = [1]; ('a'..'z').each {|alpha| group << alpha }
 
-grup[0..grup.size].each do |g|
-  # mulai dari sini:
+group.each do |g|
+  # starting point:
   s = 1
-  url = "http://manybooks.net/titles.php?alpha=#{g}&s=#{s}"
-  doc = Nokogiri::HTML(open(url, "User-Agent" => $BROWSER))
+  doc = Nokogiri::HTML(open("http://manybooks.net/titles.php?alpha=#{g}&s=#{s}", "User-Agent" => $BROWSER))
 
   # loop:
-  until sudah_buntu(doc)
-    puts_and_log("Begin ABJAD #{g} HALAMAN #{s}")
+  until doc.css('a[title="next"]').count == 0 # move to next group if there's no next
+    puts_and_log("BEGIN GROUP #{g.upcase} PAGE #{s}")
 
+    # extract book:
     doc.css('.smallBookTitle').each do |link|
       source_url = "http://manybooks.net#{link[:href]}"
       extract_manybooks(source_url)
     end
 
-    # inkremen:
+    # increment:
     s += 1
-    url = "http://manybooks.net/titles.php?alpha=#{g}&s=#{s}"
-    doc = Nokogiri::HTML(open(url, "User-Agent" => $BROWSER))
+    doc = Nokogiri::HTML(open("http://manybooks.net/titles.php?alpha=#{g}&s=#{s}", "User-Agent" => $BROWSER))
   end
 end
 
