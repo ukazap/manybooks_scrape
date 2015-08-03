@@ -14,15 +14,16 @@ def extract_book(source_url)
   data[:description] = (page.at_css('.notes'))? page.at_css('.notes').content : nil
   data[:excerpt] = (page.at_css('.excerpt'))? page.at_css('.excerpt').content : nil
 
+  # it's impossible to tell the below data elements apart using css selector, use string split instead:
   page.css('.title-info').each do |info|
     key = info.content.split(':')[0].strip.gsub(" ", "_").downcase
-    val = info.content.split(':')[1].strip
+    value = info.content.split(':')[1].strip
 
     key = (key == "published")? "published_in" : key
     key = (key == "genre")? "genres" : key
     key = (key == "wordcount")? "word_count" : key
 
-    data[key.to_sym] = val
+    data[key.to_sym] = value
   end
 
   data[:source_url] = source_url
