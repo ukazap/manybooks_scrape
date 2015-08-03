@@ -1,4 +1,4 @@
-def extract_manybooks(source_url)
+def extract_book(source_url)
   source_url.gsub!(" ", "%20") # on url, replace space char. with %20
   tid = source_url.split("/").last.gsub(".html", "") # get tid from url
   page = Nokogiri::HTML(open(source_url, "User-Agent" => $BROWSER))
@@ -16,9 +16,11 @@ def extract_manybooks(source_url)
 
   page.css('.title-info').each do |info|
     key = info.content.split(':')[0].strip.gsub(" ", "_").downcase
+    val = info.content.split(':')[1].strip
+
     key = (key == "published")? "published_in" : key
     key = (key == "genre")? "genres" : key
-    val = info.content.split(':')[1].strip
+
     data[key.to_sym] = val
   end
 

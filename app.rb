@@ -17,13 +17,13 @@ group.each do |g|
   doc = Nokogiri::HTML(open("http://manybooks.net/titles.php?alpha=#{g}&s=#{s}", "User-Agent" => $BROWSER))
 
   # loop:
-  until doc.css('a[title="next"]').count == 0 # move to next group if there's no next
+  until doc.css('a[title="next"]').count == 0 # move to next group if there's no page left
     puts_and_log("BEGIN GROUP #{g.upcase} PAGE #{s}")
 
     # extract book:
     doc.css('.smallBookTitle').each do |link|
       source_url = "http://manybooks.net#{link[:href]}"
-      extract_manybooks(source_url)
+      extract_book(source_url)
     end
 
     # increment:
